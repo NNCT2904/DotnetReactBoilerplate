@@ -1,4 +1,6 @@
+using AutoMapper;
 using cityfmcodetest.Data;
+using cityfmcodetest.Mappings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,7 +34,11 @@ namespace cityfmcodetest
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddDbContext<DataContex>(o => o.UseSqlite(Configuration.GetConnectionString("SQLite")));
+            services.AddDbContext<DataContext>(o => o.UseSqlite(Configuration.GetConnectionString("SQLite")));
+
+            services.AddAutoMapper(typeof(MappingProfile));
+
+            services.AddHttpClient();
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
