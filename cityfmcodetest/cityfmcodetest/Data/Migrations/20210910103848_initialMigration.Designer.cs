@@ -8,9 +8,9 @@ using cityfmcodetest.Data;
 
 namespace cityfmcodetest.Data.Migrations
 {
-    [DbContext(typeof(DataContex))]
-    [Migration("20210910102110_InitialMigration")]
-    partial class InitialMigration
+    [DbContext(typeof(DataContext))]
+    [Migration("20210910103848_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

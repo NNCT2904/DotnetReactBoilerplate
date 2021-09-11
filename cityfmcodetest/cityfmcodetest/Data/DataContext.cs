@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace cityfmcodetest.Data
 {
-    public class DataContex : DbContext
+    public class DataContext : DbContext
     {
-        public DataContex(DbContextOptions<DataContex> options) : base(options)
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
         }

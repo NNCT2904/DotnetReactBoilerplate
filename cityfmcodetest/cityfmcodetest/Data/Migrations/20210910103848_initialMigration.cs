@@ -2,7 +2,7 @@
 
 namespace cityfmcodetest.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class initialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

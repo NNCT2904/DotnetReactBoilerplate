@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cityfmcodetest.Data;
 
 namespace cityfmcodetest.Data.Migrations
 {
-    [DbContext(typeof(DataContex))]
-    partial class DataContexModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DataContext))]
+    [Migration("20210910111800_AddProductId")]
+    partial class AddProductId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +32,10 @@ namespace cityfmcodetest.Data.Migrations
 
                     b.Property<int>("Name")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("TEXT");
