@@ -18,6 +18,7 @@ export class Home extends Component {
           <li><strong>Client-side navigation.</strong> For example, click <em>Products</em> then <em>Back</em> to return here.</li>
           <li><strong>Dotnet Entity Framework</strong> for model migrations and query stuff from the local SQLite database.</li>
           <li><strong>Swagger</strong> for <a href="/swagger">API documentation</a>.</li>
+          <li><strong>Dot Env</strong> for local variable management. To get started, please make a <code>.env</code> file to configure the back-end variables.</li>
         </ul>
         <p>Production tab:</p>
         <ul>
@@ -26,6 +27,7 @@ export class Home extends Component {
           <li><strong>Clear Data</strong> to yeet every single entries in the <code>Product</code> table. After that, you can no longer get data from the second button.</li>
         </ul>
         <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
+        <p>For Production, please configure the</p>
       </div>
     );
   }
