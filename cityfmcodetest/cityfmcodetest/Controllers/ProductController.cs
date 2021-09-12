@@ -47,7 +47,6 @@ namespace cityfmcodetest.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetProductDto>>> GetAllProductAsync()
         {
-            Console.WriteLine(envVars["SOURCE"]);
             return await _context.Products
                 .ProjectTo<GetProductDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -63,7 +62,8 @@ namespace cityfmcodetest.Controllers
                 client.BaseAddress = new Uri(envVars["SOURCE"]);
 
                 client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+                    new MediaTypeWithQualityHeaderValue("application/json")
+                );
                 client.DefaultRequestHeaders.TryAddWithoutValidation("api-key", envVars["APIKEY"]);
 
 
