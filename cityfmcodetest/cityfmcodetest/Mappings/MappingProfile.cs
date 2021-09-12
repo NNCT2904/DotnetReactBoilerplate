@@ -12,7 +12,8 @@ namespace cityfmcodetest.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<Product, ProductDto>();
+            CreateMap<Product, FetchProductDto>();
+            CreateMap<Product, GetProductDto>();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace cityfmcodetest.Models.Dto
 {
-    public class ProductDto
+    public class GetProductDto
     {
         [JsonProperty(PropertyName = "productId")]
         public string ProductId { get; set; }
@@ -15,25 +15,18 @@ namespace cityfmcodetest.Models.Dto
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
         [JsonProperty(PropertyName = "unitPrice")]
-        public decimal UnitPrice { get; set; }
+        public decimal Price { get; set; }
         [JsonProperty(PropertyName = "maximumQuantity")]
         public int? MaximumQuantity { get; set; }
 
         [JsonConstructor]
-        public ProductDto(string productId, string name, string description, decimal unitPrice, int? maximumQuantity) {
+        public GetProductDto(string productId, string name, string description, decimal price, int? maximumQuantity)
+        {
             ProductId = productId;
             Name = name;
             Description = description;
-            UnitPrice = unitPrice;
+            Price = price;
             MaximumQuantity = maximumQuantity;
         }
     }
-
-    // public class ProductJsonConverter : JsonConverter
-    // {
-    //     public override object ReadJson()
-    //     {
-    //         return 
-    //     }
-    // }
 }

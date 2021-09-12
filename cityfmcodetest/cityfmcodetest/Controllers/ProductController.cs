@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
+using dotenv.net;
 
 namespace cityfmcodetest.Controllers
 {
@@ -34,6 +35,8 @@ namespace cityfmcodetest.Controllers
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
+        IDictionary<string, string> envVars = DotEnv.Read();
+
 
         public ProductController(DataContext context, IMapper mapper)
         {
@@ -42,35 +45,35 @@ namespace cityfmcodetest.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProductAsync()
+        public async Task<ActionResult<IEnumerable<GetProductDto>>> GetAllProductAsync()
         {
+            Console.WriteLine(envVars["SOURCE"]);
             return await _context.Products
-                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<GetProductDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
         [HttpGet("fetch")]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> FetchProductAsync()
+        public async Task<ActionResult<IEnumerable<GetProductDto>>> FetchProductAsync()
         {
             try
             {
-
-
                 HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri("http://alltheclouds.com.au/api/Products?");
+                
+                client.BaseAddress = new Uri(envVars["SOURCE"]);
 
                 client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.TryAddWithoutValidation("api-key", "API-ATX57CBV51B9UA5");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("api-key", envVars["APIKEY"]);
 
 
                 HttpResponseMessage response = client.GetAsync("").Result;
 
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                var productObjects = JsonConvert.DeserializeObject<IEnumerable<ProductDto>>(responseBody);
+                var productObjects = JsonConvert.DeserializeObject<IEnumerable<FetchProductDto>>(responseBody);
 
-                foreach (ProductDto productDto in productObjects)
+                foreach (FetchProductDto productDto in productObjects)
                 {
                     var availableProd = await _context.Products
                         .Where(p => p.ProductId == productDto.ProductId)
@@ -82,6 +85,7 @@ namespace cityfmcodetest.Controllers
                         availableProd.Description = productDto.Description;
                         availableProd.UnitPrice = productDto.UnitPrice;
                         availableProd.MaximumQuantity = productDto.MaximumQuantity;
+                        availableProd.Price = productDto.UnitPrice + productDto.UnitPrice * (decimal)0.2;
 
                         _context.Products.Update(availableProd);
                     }
@@ -94,6 +98,7 @@ namespace cityfmcodetest.Controllers
                             Description = productDto.Description,
                             UnitPrice = productDto.UnitPrice,
                             MaximumQuantity = productDto.MaximumQuantity,
+                            Price = productDto.UnitPrice + productDto.UnitPrice * (decimal)0.2,
                         };
 
                         _context.Products.Add(p);
@@ -103,7 +108,7 @@ namespace cityfmcodetest.Controllers
                 if (await _context.SaveChangesAsync() > 0)
                 {
                     return await _context.Products
-                        .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+                        .ProjectTo<GetProductDto>(_mapper.ConfigurationProvider)
                         .ToListAsync();
                 }
                 else
@@ -115,6 +120,28 @@ namespace cityfmcodetest.Controllers
             {
                 return BadRequest(e);
             }
+        }
+
+        [HttpDelete("clear")]
+        public async Task<ActionResult<IEnumerable<GetProductDto>>> ClearDataAsync()
+        {
+            var data = await _context.Products.ToListAsync();
+
+            if (data.Count > 0)
+            {
+                _context.Products.RemoveRange(_context.Products);
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    return await _context.Products
+                        .ProjectTo<GetProductDto>(_mapper.ConfigurationProvider)
+                        .ToListAsync();
+                }
+                else
+                {
+                    throw new Exception("Cannot Clear");
+                }
+            }
+            return Ok("Data already deleted");
         }
     }
 }
